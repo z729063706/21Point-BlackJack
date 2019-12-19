@@ -1,16 +1,17 @@
 ﻿//      Copyright [2019] <ZhaoYunhao,ZhuMingxi,WangZeyu,YinCheng>
 //      21Point.cpp
 //      2019.12.10
-
+//      测试环境：Win10 1903 64Bit Visual Studio 2019
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <windows.h>
+#include <windows.h>   // 非Windows下请注释此行
 #include <algorithm>
 #include <time.h>
+// #define system("cls") printf("\033[2J")   //Linux下启用此行
 constexpr auto __user = 1;
-constexpr auto __ai = 2;
+constexpr auto __ai = 2;   // 根据VS提示改的据说更好
 void reset();
 struct Poker    //     扑克牌结构体 顺序生成52张
 {
@@ -185,6 +186,7 @@ void Gameover()    //    结束界面
         Ai_Point += min(10, card[Ai_Card[i]].numb);
     }
     printf("游戏结束啦~~\n");
+    printf("本局的AI参数：%d~~\n", AI);
     printf("你的牌：");
     for (int i = 1; i <= User_Card_Number; i++) Print_Card(User_Card[i]);
     printf("\n点数和为：%d\n\n", User_Point);
@@ -199,9 +201,9 @@ void Gameover()    //    结束界面
     else if (Ai_Point > User_Point) Winner = 1;
     else Winner = -1;
     printf("根据周柏杨的判♂断：此次游戏获胜者为");
-    if (Winner == 1) printf(" AI \n看来你还要加把劲啦~~~");
+    if (Winner == 1) printf(" AI \n看来你还要加把劲啦~~~\n\n");
     else if (Winner == -1) printf(" 你 \n看来你的运气还不错，下次更换参数再来试试运气吧！\n\n");
-    else printf(" 周柏杨 因为你们都没有获胜！");
+    else printf(" 周柏杨 因为你们都没有获胜！\n\n");
     printf("按下任意键回到初始界面！");
     getchar();
     getchar();
@@ -213,20 +215,27 @@ void Game(int num)    //    游戏主体,递归进行
 {
     system("cls");
     printf("现在是第%d轮游戏啦~~\n", num);
-    printf("你的参数：%d~~\n", AI);
+    printf("本局的AI参数：%d~~\n", AI);
     printf("\n");
     printf("你的牌：");
     for (int i = 1; i <= User_Card_Number; i++)
     {
         Print_Card(User_Card[i]);
     }
+    printf("     你的点数和：");
+    int Point = 0;
+    for (int i = 1; i <= User_Card_Number; i++)
+    {
+        Point += min(10, card[User_Card[i]].numb);
+    }
+    printf("%d", Point);
     printf("\n");
     printf("Ai的牌：");
-    for (int i = 1; i <= Ai_Card_Number; i++)
+    for (int i = 1; i < Ai_Card_Number; i++)
     {
         Print_Card(Ai_Card[i]);
     }
-    printf("\n");
+    printf("(绝密)\n");
     if (Judge21())
     {
         Gameover();
@@ -272,7 +281,8 @@ void reset()
         while (flag)
         {
             gets_s(in);
-            for (int i = 0; i < strlen(in); i++)
+            int len = strlen(in);
+            for (int i = 0; i < len; i++)
             {
                 if (in[i] > '9' || in[i] < '0')
                 {
@@ -284,8 +294,9 @@ void reset()
             }
         }
         sscanf(in, "%d", &AI);
-        printf("Ai还是个小孩子呢~希望你的参数能帮助我长大！");
+        printf("Ai还是个小孩子呢~希望你的参数能帮助我长大！\n");
         AI = AI % 19 + 1;
+        printf("所以根据周柏杨的一系列运算，得到了Ai参数：%d", AI);
         printf("\n请按任意键开始愉快的游♂戏！");
         getchar();
         getchar();
